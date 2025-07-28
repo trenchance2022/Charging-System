@@ -1,0 +1,42 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    volumes:
+      - ./backend/src:/app/src
+      - maven_repo:/root/.m2
+    networks:
+      - app_network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app_network
+  
+  db:
+    image: mysql:8.4.4
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=intelligent_charging_system
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app_network
+
+volumes:
+  mysql_data:
+  maven_repo:
+
+networks:
+  app_network:
+    driver: bridge
