@@ -1,2 +1,0 @@
-CREATE DATABASE IF NOT EXISTS intelligent_charging_system;
-USE intelligent_charging_system;
